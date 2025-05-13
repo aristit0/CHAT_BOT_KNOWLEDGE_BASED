@@ -47,6 +47,8 @@ body {
 .sidebar {
   width: 240px;
   margin-right: 2rem;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .sidebar button {
@@ -148,9 +150,8 @@ button {
   padding: 1rem;
   background: var(--chatbox);
   border-radius: 8px;
-  margin-top: 1rem;
   box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  max-height: 500px;
+  max-height: 90vh;
   overflow-y: auto;
 }
 
@@ -161,13 +162,13 @@ button {
 }
 
 .doc-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.doc-list a {
+.doc-list li a {
+  display: block;
+  width: 100%;
+  padding: 4px 0;
   color: var(--text);
   text-decoration: none;
   word-break: break-word;
@@ -175,15 +176,16 @@ button {
 
 .doc-list .pagination {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
   margin-top: 1rem;
+  justify-content: center;
 }
 
 .doc-list .pagination button {
-  margin: 0 4px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.9rem;
-  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
   background: #ddd;
   border: none;
   cursor: pointer;

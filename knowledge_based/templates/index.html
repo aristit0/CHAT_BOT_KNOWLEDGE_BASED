@@ -22,10 +22,15 @@
 </head>
 <body data-theme="light">
   <div class="container">
+    <!-- Sidebar: Document List -->
     <div class="sidebar">
-      <button onclick="showDocuments()">📄 List Documents</button>
+      <div class="doc-list" id="docList">
+        <ul id="documentItems"></ul>
+        <div class="pagination" id="pagination"></div>
+      </div>
     </div>
 
+    <!-- Main Chat Area -->
     <div class="main">
       <div class="page-title">Knowledge Chat</div>
 
@@ -52,11 +57,6 @@
         <input type="text" id="userInput" placeholder="Ask a question..." />
         <button onclick="sendMessage()">Send</button>
       </div>
-
-      <div class="doc-list" id="docList" style="display:none">
-        <ul id="documentItems"></ul>
-        <div class="pagination" id="pagination"></div>
-      </div>
     </div>
   </div>
 
@@ -65,8 +65,7 @@
     const limit = 20;
 
     function showDocuments(page = 1) {
-      document.getElementById("docList").style.display = "block";
-      fetch(`/data?page=${page}&limit=${limit}`)
+      fetch(`/documents?page=${page}&limit=${limit}`)
         .then(res => res.json())
         .then(data => {
           const list = document.getElementById("documentItems");
@@ -169,6 +168,10 @@
       .catch(() => {
         uploadStatus.innerText = "❌ Upload failed. Please try again.";
       });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showDocuments();
     });
   </script>
 </body>

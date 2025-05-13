@@ -54,18 +54,14 @@ def chat():
         "image": image_url
     })
 
-@app.route("/data")
+@app.route("/documents")
 def list_documents():
     """
-    Returns paginated list of uploaded PDF filenames.
-    Query params:
-      - page (default: 1)
-      - limit (default: 20)
+    Lists processed .txt files in /data with pagination.
     """
+    data_dir = "/home/cdsw/knowledge_based/data/"
     try:
-        files = sorted(
-            [f for f in os.listdir(UPLOAD_FOLDER) if f.lower().endswith(".pdf")]
-        )
+        files = sorted([f for f in os.listdir(data_dir) if f.endswith(".txt")])
         page = int(request.args.get("page", 1))
         limit = int(request.args.get("limit", 20))
         start = (page - 1) * limit
@@ -80,13 +76,15 @@ def list_documents():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
 @app.route("/download/<filename>")
 def download_file(filename):
     """
-    Allows downloading a selected PDF from the upload folder.
+    Downloads a .txt file from /data
     """
-    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
+    data_dir = "/home/cdsw/knowledge_based/data/"
+    return send_from_directory(data_dir, filename, as_attachment=True)
 
 # === Run in CML ===
 if __name__ == "__main__":

@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GenAI Chatbot</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body data-theme="light">
   <div class="container">
+
     <div class="top-bar">
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <label>
-          <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
-        </label>
-        <input id="file-upload" type="file" name="file" onchange="this.form.submit()" style="display:none" />
-      </form>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 40px;" />
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <label>
+            <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
+          </label>
+          <input id="file-upload" type="file" name="file" onchange="this.form.submit()" style="display:none" />
+        </form>
+      </div>
       <div>
         <button onclick="clearChat()">🧹 Clear</button>
         <button class="toggle-btn" onclick="toggleTheme()">🌓 Theme</button>
@@ -80,6 +84,13 @@
       const next = current === 'light' ? 'dark' : 'light';
       body.setAttribute('data-theme', next);
     }
+
+    document.getElementById("userInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
   </script>
 </body>
 </html>

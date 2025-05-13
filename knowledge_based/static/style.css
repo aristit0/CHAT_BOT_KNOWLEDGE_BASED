@@ -11,6 +11,7 @@
   --user-bubble: #d2f8d2;
   --bot-bubble-dark: #375a7f;
   --user-bubble-dark: #3c6e5d;
+  --primary-blue: #0057ff;
 }
 
 [data-theme="light"] {
@@ -47,20 +48,25 @@ body {
 .sidebar {
   width: 240px;
   margin-right: 2rem;
-  overflow-y: auto;
-  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar button {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: none;
+.sidebar .doc-list {
+  flex: 1;
+  padding: 1rem;
+  background: var(--chatbox);
   border-radius: 8px;
-  margin-bottom: 1rem;
-  background-color: #0057ff;
-  color: white;
-  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.sidebar .doc-list-title {
+  font-weight: 600;
+  color: var(--primary-blue);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
 }
 
 .main {
@@ -133,7 +139,7 @@ button {
   font-size: 1rem;
   border: none;
   border-radius: 8px;
-  background-color: #0057ff;
+  background-color: var(--primary-blue);
   color: white;
   cursor: pointer;
 }
@@ -144,15 +150,6 @@ button {
   font-size: 1rem;
   cursor: pointer;
   color: var(--text);
-}
-
-.doc-list {
-  padding: 1rem;
-  background: var(--chatbox);
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  max-height: 90vh;
-  overflow-y: auto;
 }
 
 .doc-list ul {
@@ -192,6 +189,6 @@ button {
 }
 
 .doc-list .pagination button.active {
-  background: #0057ff;
+  background: var(--primary-blue);
   color: white;
 }

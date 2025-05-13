@@ -40,6 +40,7 @@ body {
 
 .container {
   display: flex;
+  align-items: flex-start;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
@@ -50,6 +51,7 @@ body {
   margin-right: 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 }
 
 .sidebar .doc-list {
@@ -58,8 +60,10 @@ body {
   background: var(--chatbox);
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  max-height: 500px;
+  height: 500px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar .doc-list-title {
@@ -156,6 +160,7 @@ button {
   padding: 0;
   margin: 0;
   list-style: none;
+  flex-grow: 1;
 }
 
 .doc-list li {

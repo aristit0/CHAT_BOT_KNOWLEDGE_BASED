@@ -1,47 +1,39 @@
-# rag_chain.py
 from transformers import pipeline
 from index import search
-import os
 
-# Load LLM pipeline with GPU
+# Load Falcon model with GPU
 MODEL = pipeline(
     "text-generation",
     model="tiiuae/falcon-7b-instruct",
     trust_remote_code=True,
-    device=0  # GPU ID
+    device=0
 )
-
-DATA_DIR = "/home/cdsw/knowledge_based/data/"
 
 def generate_answer(query):
     """
-    Retrieve relevant documents and use Falcon-7B to generate a response.
-
-    Args:
-        query (str): The user’s troubleshooting question.
-
-    Returns:
-        Tuple (answer, document filename)
+    Generate answer using retrieved text chunks and Falcon-7B.
+    Returns: (answer_text, source_chunk_name)
     """
-    # Step 1: Retrieve most relevant docs
-    top_docs = search(query)
+    # Step 1: Get relevant chunks (text + id)
+    top_chunks = search(query)
 
-    # Step 2: Read and truncate content from top doc(s)
-    context = "\n---\n".join(
-        open(os.path.join(DATA_DIR, fname), encoding="utf-8").read()[:1000]
-        for fname in top_docs
-    )
+    if not top_chunks:
+        return "Sorry, I couldn't find anything relevant in your documents.", ""
 
-    # Step 3: Build prompt for LLM
+    # Step 2: Build prompt from top matched text chunks
+    context = "\n---\n".join(chunk[0] for chunk in top_chunks)
+
     prompt = f"""You are a helpful assistant for IT troubleshooting.
+
 Context:
 {context}
 
 Question: {query}
 Answer:"""
 
-    # Step 4: Generate output from LLM
+    # Step 3: Run LLM
     output = MODEL(prompt, max_new_tokens=200, do_sample=True, temperature=0.7)
     result = output[0]["generated_text"].split("Answer:")[-1].strip()
 
-    return result, top_docs[0] if top_docs else ""
+    # Return answer + first matched chunk ID
+    return result, top_chunks[0][1]

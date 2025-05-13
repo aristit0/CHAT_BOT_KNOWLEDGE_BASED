@@ -22,3 +22,4 @@ numpy
 scikit-learn
 ipywidgets
 huggingface_hub[hf_xet]
+pdfplumber

@@ -1,0 +1,18 @@
+# requirements.txt
+
+# Core
+torch==2.0.1+cu118     # or match your CUDA version
+torchvision==0.15.2+cu118
+torchaudio==2.0.2+cu118
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+transformers==4.38.2
+sentence-transformers==2.2.2
+faiss-gpu==1.7.2
+flask==2.2.5
+python-docx==0.8.11
+pdfplumber==0.10.3
+pypdf==3.17.4
+google-api-python-client==2.128.0
+google-auth==2.29.0
+google-auth-oauthlib==1.2.0

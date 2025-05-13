@@ -20,3 +20,5 @@ torch  # GPU-enabled version is preinstalled in CML usually
 # Utils
 numpy
 scikit-learn
+ipywidgets
+huggingface_hub[hf_xet]

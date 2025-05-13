@@ -4,20 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GenAI Chatbot</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    #uploadStatus {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      color: #666;
+    }
+    .page-title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
 </head>
 <body data-theme="light">
   <div class="container">
+    <div class="page-title">Knowledge Chat</div>
 
     <div class="top-bar">
       <div style="display: flex; align-items: center; gap: 1rem;">
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 40px;" />
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form id="uploadForm" method="post" enctype="multipart/form-data">
           <label>
             <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
           </label>
-          <input id="file-upload" type="file" name="file" onchange="this.form.submit()" style="display:none" />
+          <input id="file-upload" type="file" name="file" style="display: none" />
+          <div id="uploadStatus"></div>
         </form>
       </div>
       <div>
@@ -90,6 +105,28 @@
         e.preventDefault();
         sendMessage();
       }
+    });
+
+    document.getElementById("file-upload").addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadStatus = document.getElementById("uploadStatus");
+      uploadStatus.innerText = "⏳ Uploading and processing...";
+
+      fetch("/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(() => {
+        uploadStatus.innerText = "✅ Upload complete. You can now chat with your document.";
+      })
+      .catch(() => {
+        uploadStatus.innerText = "❌ Upload failed. Please try again.";
+      });
     });
   </script>
 </body>

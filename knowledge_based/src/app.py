@@ -8,11 +8,18 @@ sys.path.append("/home/cdsw/knowledge_based/src")
 
 from rag_chain import generate_answer
 
-app = Flask(__name__)
 UPLOAD_FOLDER = "/home/cdsw/knowledge_based/document/"
 TEMPLATE_FOLDER = "/home/cdsw/knowledge_based/templates/"
+STATIC_FOLDER = "/home/cdsw/knowledge_based/static/"
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.template_folder = TEMPLATE_FOLDER
+
+# Tell Flask where to find templates and static files
+app = Flask(
+    __name__,
+    template_folder=TEMPLATE_FOLDER,
+    static_folder=STATIC_FOLDER
+)
 
 
 @app.route("/")
@@ -43,12 +50,13 @@ def chat():
         return jsonify({"answer": "Please enter a valid question.", "image": ""})
 
     answer, doc = generate_answer(query)
-    image_url = "https://via.placeholder.com/80x60.png?text=" + doc[:10]
+    image_url = "/static/chatbot.png"  # ← Use your chatbot image here
 
     return jsonify({
         "answer": answer,
         "image": image_url
     })
+
 
 # === Run in CML ===
 if __name__ == "__main__":

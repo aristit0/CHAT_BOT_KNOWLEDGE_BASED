@@ -1,131 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GenAI Troubleshooting Chat</title>
-  <style>
-    :root {
-      --bg-color: #f4f9ff;
-      --text-color: #000;
-      --chat-bg: #ffffff;
-      --user-bubble: #d1ffd6;
-      --bot-bubble: #e0f0ff;
-    }
-    [data-theme="dark"] {
-      --bg-color: #1e1e2f;
-      --text-color: #f1f1f1;
-      --chat-bg: #2a2a3b;
-      --user-bubble: #3c6e5d;
-      --bot-bubble: #375a7f;
-    }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .chat-box {
-      background: var(--chat-bg);
-      border-radius: 10px;
-      padding: 1rem;
-      height: 500px;
-      overflow-y: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-bottom: 1rem;
-      transition: background 0.3s;
-    }
-    .message {
-      margin: 0.5rem 0;
-      display: flex;
-      align-items: flex-start;
-    }
-    .message.user {
-      justify-content: flex-end;
-    }
-    .message.bot img {
-      width: 60px;
-      height: auto;
-      border-radius: 10px;
-      margin-right: 10px;
-    }
-    .message-content {
-      max-width: 70%;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      transition: background 0.3s;
-    }
-    .message.user .message-content {
-      background: var(--user-bubble);
-    }
-    .message.bot .message-content {
-      background: var(--bot-bubble);
-    }
-    .input-group {
-      display: flex;
-      gap: 0.5rem;
-    }
-    input[type="text"] {
-      flex: 1;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background-color: #2b78e4;
-      color: white;
-    }
-    .theme-toggle {
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-size: 1rem;
-      color: var(--text-color);
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GenAI Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body data-theme="light">
   <div class="container">
-    <div class="header">
+    <div class="top-bar">
       <form action="/upload" method="post" enctype="multipart/form-data">
-        <label for="file-upload" class="custom-file-upload">
-          <button type="button">📁 Upload PDF</button>
+        <label>
+          <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
         </label>
-        <input id="file-upload" type="file" name="file" onchange="this.form.submit()"/>
+        <input id="file-upload" type="file" name="file" onchange="this.form.submit()" style="display:none" />
       </form>
       <div>
-        <button onclick="clearChat()">🧹 Clear Chat</button>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓 Toggle Theme</button>
+        <button onclick="clearChat()">🧹 Clear</button>
+        <button class="toggle-btn" onclick="toggleTheme()">🌓 Theme</button>
       </div>
     </div>
 
     <div class="chat-box" id="chatBox"></div>
 
     <div class="input-group">
-      <input type="text" id="userInput" placeholder="Ask your troubleshooting question..." />
-      <button onclick="sendMessage()">▶ Send</button>
+      <input type="text" id="userInput" placeholder="Ask a question..." />
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
 
@@ -144,6 +45,7 @@
       const contentDiv = document.createElement('div');
       contentDiv.className = 'message-content';
       contentDiv.innerText = text;
+
       messageDiv.appendChild(contentDiv);
       chatBox.appendChild(messageDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
@@ -175,7 +77,8 @@
     function toggleTheme() {
       const body = document.body;
       const current = body.getAttribute('data-theme');
-      body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+      const next = current === 'light' ? 'dark' : 'light';
+      body.setAttribute('data-theme', next);
     }
   </script>
 </body>

@@ -54,7 +54,7 @@ def chat():
         "image": image_url
     })
 
-@app.route("/documents")
+@app.route("/data")
 def list_documents():
     """
     Returns paginated list of uploaded PDF filenames.

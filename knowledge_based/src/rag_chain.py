@@ -1,4 +1,8 @@
-from transformers import pipeline
+import sys
+import os
+
+# Add the path where index.py is located
+sys.path.append("/home/cdsw/knowledge_based/src")
 from index import search
 
 # Load Falcon model with GPU

@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, request, render_template, jsonify, redirect
+from flask import Flask, request, render_template, jsonify, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 
 # Explicitly add src folder to path
@@ -21,11 +21,9 @@ app = Flask(
     static_folder=STATIC_FOLDER
 )
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 @app.route("/upload", methods=["POST"])
 def upload():
@@ -41,7 +39,6 @@ def upload():
 
     return redirect("/")
 
-
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -50,13 +47,30 @@ def chat():
         return jsonify({"answer": "Please enter a valid question.", "image": ""})
 
     answer, doc = generate_answer(query)
-    image_url = "/static/chatbot.png"  # ← Use your chatbot image here
+    image_url = "/static/chatbot.png"
 
     return jsonify({
         "answer": answer,
         "image": image_url
     })
 
+@app.route("/documents")
+def list_documents():
+    """
+    Returns a JSON list of uploaded PDF filenames.
+    """
+    try:
+        files = [f for f in os.listdir(UPLOAD_FOLDER) if f.lower().endswith(".pdf")]
+        return jsonify(files)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/download/<filename>")
+def download_file(filename):
+    """
+    Allows downloading a selected PDF from the upload folder.
+    """
+    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
 
 # === Run in CML ===
 if __name__ == "__main__":

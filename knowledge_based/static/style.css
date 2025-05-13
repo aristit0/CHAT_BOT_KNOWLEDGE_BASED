@@ -52,6 +52,11 @@ body {
   flex-direction: column;
 }
 
+.sidebar .top-gap {
+  height: 60px;
+  margin-bottom: 1rem;
+}
+
 .sidebar .doc-header {
   padding: 0.75rem 1rem;
   background-color: var(--primary-blue);

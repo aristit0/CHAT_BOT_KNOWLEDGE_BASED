@@ -18,13 +18,6 @@
       font-size: 1.5rem;
       margin-bottom: 1rem;
     }
-    #fileDropdown {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      padding: 0.4rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
   </style>
 </head>
 <body data-theme="light">
@@ -32,20 +25,15 @@
     <div class="page-title">Knowledge Chat</div>
 
     <div class="top-bar">
-      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 40px;" />
-          <form id="uploadForm" method="post" enctype="multipart/form-data">
-            <label>
-              <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
-            </label>
-            <input id="file-upload" type="file" name="file" style="display: none" />
-          </form>
-        </div>
-        <div id="uploadStatus"></div>
-        <select id="fileDropdown" onchange="handleDownload()">
-          <option disabled selected>📄 Select a PDF to download</option>
-        </select>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 40px;" />
+        <form id="uploadForm" method="post" enctype="multipart/form-data">
+          <label>
+            <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
+          </label>
+          <input id="file-upload" type="file" name="file" style="display: none" />
+          <div id="uploadStatus"></div>
+        </form>
       </div>
       <div>
         <button onclick="clearChat()">🧹 Clear</button>
@@ -112,31 +100,6 @@
       body.setAttribute('data-theme', next);
     }
 
-    function fetchDocumentList() {
-      fetch("/documents")
-        .then(res => res.json())
-        .then(files => {
-          const dropdown = document.getElementById("fileDropdown");
-          files.forEach(file => {
-            const option = document.createElement("option");
-            option.value = file;
-            option.textContent = file;
-            dropdown.appendChild(option);
-          });
-        });
-    }
-
-    function handleDownload() {
-      const dropdown = document.getElementById("fileDropdown");
-      const selected = dropdown.value;
-      if (selected) {
-        window.open(`/download/${selected}`, "_blank");
-        dropdown.selectedIndex = 0;
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", fetchDocumentList);
-
     document.getElementById("userInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
@@ -160,9 +123,6 @@
       })
       .then(() => {
         uploadStatus.innerText = "✅ Upload complete. You can now chat with your document.";
-        document.getElementById("fileDropdown").innerHTML =
-          '<option disabled selected>📄 Select a PDF to download</option>';
-        fetchDocumentList();
       })
       .catch(() => {
         uploadStatus.innerText = "❌ Upload failed. Please try again.";

@@ -22,34 +22,75 @@
 </head>
 <body data-theme="light">
   <div class="container">
-    <div class="page-title">Knowledge Chat</div>
-
-    <div class="top-bar">
-      <div style="display: flex; align-items: center; gap: 1rem;">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 40px;" />
-        <form id="uploadForm" method="post" enctype="multipart/form-data">
-          <label>
-            <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
-          </label>
-          <input id="file-upload" type="file" name="file" style="display: none" />
-          <div id="uploadStatus"></div>
-        </form>
-      </div>
-      <div>
-        <button onclick="clearChat()">🧹 Clear</button>
-        <button class="toggle-btn" onclick="toggleTheme()">🌓 Theme</button>
-      </div>
+    <div class="sidebar">
+      <button onclick="showDocuments()">📄 List Documents</button>
     </div>
 
-    <div class="chat-box" id="chatBox"></div>
+    <div class="main">
+      <div class="page-title">Knowledge Chat</div>
 
-    <div class="input-group">
-      <input type="text" id="userInput" placeholder="Ask a question..." />
-      <button onclick="sendMessage()">Send</button>
+      <div class="top-bar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 40px;" />
+          <form id="uploadForm" method="post" enctype="multipart/form-data">
+            <label>
+              <button type="button" onclick="document.getElementById('file-upload').click()">📁 Upload PDF</button>
+            </label>
+            <input id="file-upload" type="file" name="file" style="display: none" />
+            <div id="uploadStatus"></div>
+          </form>
+        </div>
+        <div>
+          <button onclick="clearChat()">🧹 Clear</button>
+          <button class="toggle-btn" onclick="toggleTheme()">🌓 Theme</button>
+        </div>
+      </div>
+
+      <div class="chat-box" id="chatBox"></div>
+
+      <div class="input-group">
+        <input type="text" id="userInput" placeholder="Ask a question..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+
+      <div class="doc-list" id="docList" style="display:none">
+        <ul id="documentItems"></ul>
+        <div class="pagination" id="pagination"></div>
+      </div>
     </div>
   </div>
 
   <script>
+    let currentPage = 1;
+    const limit = 20;
+
+    function showDocuments(page = 1) {
+      document.getElementById("docList").style.display = "block";
+      fetch(`/documents?page=${page}&limit=${limit}`)
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById("documentItems");
+          const pagination = document.getElementById("pagination");
+          list.innerHTML = "";
+          pagination.innerHTML = "";
+
+          data.documents.forEach(name => {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="/download/${name}" target="_blank">${name}</a>`;
+            list.appendChild(li);
+          });
+
+          const totalPages = Math.ceil(data.total / limit);
+          for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.className = i === data.page ? "active" : "";
+            btn.onclick = () => showDocuments(i);
+            pagination.appendChild(btn);
+          }
+        });
+    }
+
     function appendMessage(text, sender = 'user', image = null) {
       const chatBox = document.getElementById('chatBox');
       const messageDiv = document.createElement('div');
@@ -123,6 +164,7 @@
       })
       .then(() => {
         uploadStatus.innerText = "✅ Upload complete. You can now chat with your document.";
+        showDocuments(currentPage);
       })
       .catch(() => {
         uploadStatus.innerText = "❌ Upload failed. Please try again.";

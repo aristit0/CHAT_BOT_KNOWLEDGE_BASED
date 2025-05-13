@@ -38,9 +38,31 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  display: flex;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+}
+
+.sidebar {
+  width: 240px;
+  margin-right: 2rem;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #0057ff;
+  color: white;
+  cursor: pointer;
+}
+
+.main {
+  flex: 1;
 }
 
 .top-bar {
@@ -120,4 +142,54 @@ button {
   font-size: 1rem;
   cursor: pointer;
   color: var(--text);
+}
+
+.doc-list {
+  padding: 1rem;
+  background: var(--chatbox);
+  border-radius: 8px;
+  margin-top: 1rem;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.doc-list ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.doc-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.doc-list a {
+  color: var(--text);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.doc-list .pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.doc-list .pagination button {
+  margin: 0 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  background: #ddd;
+  border: none;
+  cursor: pointer;
+}
+
+.doc-list .pagination button.active {
+  background: #0057ff;
+  color: white;
 }

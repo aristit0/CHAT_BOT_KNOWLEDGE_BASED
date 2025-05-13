@@ -57,11 +57,27 @@ def chat():
 @app.route("/documents")
 def list_documents():
     """
-    Returns a JSON list of uploaded PDF filenames.
+    Returns paginated list of uploaded PDF filenames.
+    Query params:
+      - page (default: 1)
+      - limit (default: 20)
     """
     try:
-        files = [f for f in os.listdir(UPLOAD_FOLDER) if f.lower().endswith(".pdf")]
-        return jsonify(files)
+        files = sorted(
+            [f for f in os.listdir(UPLOAD_FOLDER) if f.lower().endswith(".pdf")]
+        )
+        page = int(request.args.get("page", 1))
+        limit = int(request.args.get("limit", 20))
+        start = (page - 1) * limit
+        end = start + limit
+        total = len(files)
+
+        return jsonify({
+            "documents": files[start:end],
+            "total": total,
+            "page": page,
+            "limit": limit
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

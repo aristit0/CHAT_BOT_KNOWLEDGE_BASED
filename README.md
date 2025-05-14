@@ -19,21 +19,27 @@ This project is a Retrieval-Augmented Generation (RAG) chatbot designed for IT t
 ## 📁 Folder Structure
 
 knowledge_based/
-├── document/       # Uploaded PDFs
-├── data/           # Processed text files
-├── embeddings/     # FAISS index and metadata
-├── src/
-│   ├── app.py          # Flask web server
-│   ├── ingest.py       # Extract PDF -> TXT
-│   ├── embed.py        # Embed TXT -> FAISS
-│   ├── index.py        # FAISS search logic
-│   ├── rag_chain.py    # RAG pipeline with Falcon
+├── document/                   # 📥 Uploaded PDF files
+├── data/                       # 📄 Extracted .txt documents (processed from PDF)
+├── embeddings/                 # 🧠 FAISS index and chunk metadata (.faiss, .npy)
+│
+├── src/                        # 🧪 Core logic and backend components
+│   ├── app.py                  # 🔌 Flask web server for chat and upload endpoints
+│   ├── ingest.py               # 📤 Extracts text from PDF into structured plain text
+│   ├── embed.py               # 🔎 Embeds chunks with SentenceTransformer and stores in FAISS
+│   ├── index.py                # 🎯 FAISS search wrapper for semantic retrieval
+│   ├── rag_chain.py            # 🧠 Prompt construction and LLM generation (Falcon-7B)
+│
 ├── templates/
-│   └── index.html      # Chat UI
+│   └── index.html              # 💬 Frontend chat interface (HTML + JS)
+│
 ├── static/
-│   ├── style.css       # UI styling
-│   ├── chatbot.png     # Bot avatar
-│   └── logo.png        # Logo
+│   ├── style.css               # 🎨 UI styles (light/dark mode, layout, theming)
+│   ├── logo.png                # 📛 Project logo for header bar
+│   └── chatbot.png             # 🤖 Chatbot avatar shown in answers
+│
+├── requirements.txt            # 📦 Python dependencies
+└── README.md                   # 📘 Project overview and instructions
 
 ---
 
